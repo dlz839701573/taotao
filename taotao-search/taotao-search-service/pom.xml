@@ -3,34 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.taotao</groupId>
-		<artifactId>taotao-parent</artifactId>
+		<artifactId>taotao-search</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.taotao</groupId>
-	<artifactId>taotao-manager-web</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>taotao-search-service</artifactId>
 	<packaging>war</packaging>
 	<dependencies>
-	      <!-- 后台创建索引需要引入的 -->
+		<!-- 添加接口的依赖 -->
 		<dependency>
 			<groupId>com.taotao</groupId>
 			<artifactId>taotao-search-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-	
-		<!-- manager-interface接口 -->
-		<dependency>
-			<groupId>com.taotao</groupId>
-			<artifactId>taotao-manager-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<!-- 引入content-interface -->
-		<dependency>
-			<groupId>com.taotao</groupId>
-			<artifactId>taotao-content-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -60,32 +44,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
-		<!-- JSP相关 -->
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jsp-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<!-- 文件上传组件 -->
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-		</dependency>
-		
-	<dependency>	
-  		<groupId>fastdfs_client</groupId>
-  		<artifactId>fastdfs_client</artifactId>
-  		<version>1.25</version>
-	</dependency>	
 		<!-- dubbo相关 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -110,18 +68,74 @@
 			<groupId>com.github.sgroschupf</groupId>
 			<artifactId>zkclient</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-solrj</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Mybatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+		</dependency>
+		<!-- 分页插件pagehelper -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+		</dependency>
+
+		<!-- MySql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<!-- 连接池 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
-			<!-- 配置tomcat插件 -->
+			<!-- 配置打包时跳过测试 ，首次配置使用的时候会自动联网进行下载 -->
 			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<!-- 跳过测试 -->
 				<configuration>
-					<port>8081</port>
-					<path>/</path>
+					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
 		</plugins>
+		<!-- 拷贝资源 -->
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+			<!-- 如果没有此节点，src/main/resources目录下的配置文件将被忽略 -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+
 	</build>
 </project>

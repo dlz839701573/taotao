@@ -13,22 +13,11 @@
 	<dubbo:application name="taotao-manager-web"/>
 	
 	<dubbo:registry protocol="zookeeper" address="39.96.180.131:2181"/>	
-	<dubbo:reference interface="com.taotao.service.TestService" id="testService"  timeout="300000"/>
-	<dubbo:reference interface="com.taotao.service.ItemService" id="itemService" timeout="300000"/>
-	<dubbo:reference interface="com.taotao.service.ItemCatService" id="itemCatService" timeout="300000"/>
-	<dubbo:reference interface="com.taotao.content.service.ContentCategoryService" id="contentCategoryService" timeout="300000"/>
-	<dubbo:reference interface="com.taotao.content.service.ContentService" id="contentService" timeout="300000"/>
+	<!-- <dubbo:reference interface="com.taotao.search.service.SearchService" id="searchService" />
+ -->	
 	
-	<dubbo:reference interface="com.taotao.search.service.SearchService" id="searchService" />
 	<context:property-placeholder location="classpath:resource/*.properties"/>
-	<!-- 定义文件上传解析器 -->
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<!-- 设定默认编码 -->
-		<property name="defaultEncoding" value="UTF-8"></property>
-		<!-- 设定文件上传的最大值5MB，5*1024*1024 -->
-		<property name="maxUploadSize" value="5242880"></property>
-	</bean>
+	
 	
 	<mvc:annotation-driven />
 	<bean
@@ -37,6 +26,5 @@
 		<property name="suffix" value=".jsp" />
 	</bean>	
 	
-	<mvc:resources location="/WEB-INF/js/" mapping="/js/**"/>
-	<mvc:resources location="/WEB-INF/css/" mapping="/css/**"/>
+	
 </beans>
