@@ -16,11 +16,19 @@ public class SearchController {
 	@Autowired
 	private SearchService  searchService;
 	
-	
+	//一键添加索引
 	@RequestMapping("/index/importall")
 	@ResponseBody
 	public TaotaoResult  Importment() throws Exception{
 		searchService.importAllSearchItems();
+		return TaotaoResult.ok();
+	}
+	
+	//一键删除索引
+	@RequestMapping("/index/deimportall")
+	@ResponseBody
+	public TaotaoResult  DeImportment() throws Exception{
+		searchService.DeImportAllSearchItems();
 		return TaotaoResult.ok();
 	}
 }

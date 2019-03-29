@@ -7,4 +7,6 @@ import com.taotao.common.pojo.TaotaoResult;
 
 public interface SearchService {
 	public TaotaoResult importAllSearchItems() throws Exception;
+
+	public TaotaoResult DeImportAllSearchItems()throws Exception;
 }

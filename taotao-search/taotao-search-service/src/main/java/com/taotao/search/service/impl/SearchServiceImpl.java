@@ -27,8 +27,7 @@ public class SearchServiceImpl implements SearchService {
 	
 /*	@Override
 	public TaotaoResult importAllSearchItems() {
-		//注入mapper
-		//查询到的数据需要交给solrj
+		
 		List<SearchItem> searchItemList = searchItemMapper.getSearchItemList();
 		
 		
@@ -98,6 +97,15 @@ public class SearchServiceImpl implements SearchService {
 		//提交修改
 		solrServer.commit();
 		// 6、返回TaotaoResult。
+		return TaotaoResult.ok();
+	}
+
+	@Override
+	public TaotaoResult DeImportAllSearchItems() throws Exception {
+		//删除所有索引
+		solrServer.deleteByQuery("*:*");
+		//提交修改
+		solrServer.commit();
 		return TaotaoResult.ok();
 	}
 }
