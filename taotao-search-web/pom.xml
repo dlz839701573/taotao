@@ -11,6 +11,19 @@
   <packaging>war</packaging>
   
   <dependencies>
+  	<!-- common -->
+		<dependency>
+			<groupId>com.taotao</groupId>
+			<artifactId>taotao-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- search-interface -->
+		<dependency>
+			<groupId>com.taotao</groupId>
+			<artifactId>taotao-search-interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+  	
   	
 <!-- Spring -->
 		<dependency>
@@ -82,6 +95,27 @@
 		<dependency>
 			<groupId>com.github.sgroschupf</groupId>
 			<artifactId>zkclient</artifactId>
+		</dependency>
+		
+		<!-- JSP相关 -->
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jsp-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

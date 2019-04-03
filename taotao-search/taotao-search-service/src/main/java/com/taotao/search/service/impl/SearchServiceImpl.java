@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.taotao.common.pojo.SearchItem;
+import com.taotao.common.pojo.SearchResult;
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.search.mapper.SearchItemMapper;
 import com.taotao.search.service.SearchService;
@@ -108,4 +109,18 @@ public class SearchServiceImpl implements SearchService {
 		solrServer.commit();
 		return TaotaoResult.ok();
 	}
+	
+	
+	//显示查询结果
+	//注入mapper
+	//将查询到的数据进行包装
+	//传入的参数？Integer start,Integer rows,分页参数
+	//返回的参数一个对象SearchResult
+	public List<SearchResult> QueryAll(Integer start,Integer rows){
+		
+		
+		return null;
+	}
+	
+	
 }
