@@ -25,5 +25,12 @@ public class SearchResult implements Serializable{
 	public void setPageCount(long pageCount) {
 		this.pageCount = pageCount;
 	}
+	@Override
+	public String toString() {
+		return "SearchResult [itemList=" + itemList.toString() + ", totalCount=" + totalCount + ", pageCount=" + pageCount + "]";
+	}
+	
+	
+	
 	
 }

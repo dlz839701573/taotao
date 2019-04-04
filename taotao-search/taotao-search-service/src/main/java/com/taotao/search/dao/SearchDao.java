@@ -88,7 +88,8 @@ public class SearchDao {
 			list.add(item);
 		}
 		searchResult.setItemList(list);
-		
+		//因为这里得到的searchResult对象的pageCount所以需要在service层完善
+	
 		return searchResult;
 		//创建一个query对象
 	}

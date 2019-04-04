@@ -1,8 +1,8 @@
 package com.taotao.search.service.impl;
 
-import java.io.IOException;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import com.taotao.common.pojo.SearchItem;
 import com.taotao.common.pojo.SearchResult;
 import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.search.dao.SearchDao;
 import com.taotao.search.mapper.SearchItemMapper;
 import com.taotao.search.service.SearchService;
-
 
 //注入service
 //注入mapper
@@ -26,6 +26,8 @@ public class SearchServiceImpl implements SearchService {
 	@Autowired
 	private SolrServer solrServer; 
 	
+	@Autowired
+	private SearchDao searchDao;
 /*	@Override
 	public TaotaoResult importAllSearchItems() {
 		
@@ -110,16 +112,64 @@ public class SearchServiceImpl implements SearchService {
 		return TaotaoResult.ok();
 	}
 	
+	/**
+	 * 显示查询结果
+	 * 
+	 */
 	
-	//显示查询结果
 	//注入mapper
 	//将查询到的数据进行包装
-	//传入的参数？Integer start,Integer rows,分页参数
-	//返回的参数一个对象SearchResult
-	public List<SearchResult> QueryAll(Integer start,Integer rows){
+	//传入的参数？      1.查询内容String queryString
+	//			2.查询内容一页几行Integer rows
+	//          3.从第几页开始显示Integer page
+				//计算开始数据位置(page-1)*rows
+	//		返回的参数一个对象SearchResult
+	
+	@Override
+	public SearchResult search(String queryString, Integer page, Integer rows) throws Exception {
+		//1.创建一个SearchQuery对象
+		SolrQuery query = new SolrQuery();
+		//2.设置主查询条件以及搜索的域
+		//设置默认搜索的域
+		query.set("df","item_keywords");
+		//设置主查询条件
+		if(queryString!=null){
+			query.setQuery(queryString);
+		}else{
+			query.set("*:*");
+		}
+		
+
+		//3.设置过滤条件,设置分页
+		if(page==null)page=1;
+		if(rows==null)rows=60;
+		
+		query.setRows(rows);
+		//数据开始位置
+		query.setStart((page-1)*rows);   
+		//4.设置高亮
+				//开启高亮
+		query.setHighlight(true);
+				//设置高亮域
+		query.addHighlightField("item_title");
+				//设置前后缀
+		query.setHighlightSimplePre("<em style=\"color:red\">");
+		query.setHighlightSimplePost("</em>");
+		
+		//执行查询
+		SearchResult result = searchDao.QueryAll(query);
+		// 7、需要计算总页数=总记录数除以每页记录数~~~
+		long recordCount = result.getTotalCount();
+		//完善 totalCount/总记录数pageCount
 		
 		
-		return null;
+		Long  pageCount=  recordCount/rows;
+		if(recordCount%rows>0){
+			pageCount++;
+		}
+		result.setPageCount(pageCount);
+		
+		return result;
 	}
 	
 	
