@@ -33,8 +33,9 @@ public class SearchControler {
 		SearchResult result = searchService.search(queryString, page, ITEM_ROWS);
 		//将数据传递到jsp页面中(第一个为jsp页面请求的数据，第二个为结果)
 		System.out.println(result.toString());
+	//	测试错误界面int i=10/0;
 		model.addAttribute("query", queryString);
-		model.addAttribute("totalPages",result.getTotalCount());
+		model.addAttribute("totalPages",result.getPageCount());
 		model.addAttribute("itemList",result.getItemList());
 		model.addAttribute("page",page);
 		return "search";

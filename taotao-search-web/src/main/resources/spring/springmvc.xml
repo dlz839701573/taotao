@@ -14,6 +14,8 @@
 	
 	<context:property-placeholder location="classpath:resource/*.properties"/>
 	
+	<!-- 全局配置异常处理器类 -->
+	<bean class="com.taotao.search.exception.GlobalExceptionReslover"></bean>
 	
 	<mvc:annotation-driven />
 	<bean
