@@ -60,6 +60,7 @@ public class SearchItem implements Serializable {
 	public void setItem_desc(String item_desc) {
 		this.item_desc = item_desc;
 	}
+	
 	@Override
 	public String toString() {
 		return "SearchItem [id=" + id + ", title=" + title + ", sell_point=" + sell_point + ", price=" + price

@@ -45,6 +45,7 @@
 	<div class="p-img">
 		<a target="_blank" href="/item/${item.id }.html">
 			<%-- <img width="160" height="160" data-img="1" data-lazyload="${item.images[0]}" /> --%>
+			<img width="160" height="160" data-img="1" data-lazyload="${item.image}" />
 		</a>
 	</div>
 	<div class="p-name">

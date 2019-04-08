@@ -15,8 +15,8 @@ public class SearchControler {
 	
 	/**
 	 * 查询参数page(需要制定page)
-	 * 查询条件queryString
-	 * 
+	 * 查询条件queryString(前台传来的是q，需要进行转换)
+	 * 需要返回的是Model视图
 	 */
 	@Autowired
 	private SearchService  searchService;
