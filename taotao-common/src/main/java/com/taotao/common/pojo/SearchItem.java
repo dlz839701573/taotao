@@ -60,7 +60,14 @@ public class SearchItem implements Serializable {
 	public void setItem_desc(String item_desc) {
 		this.item_desc = item_desc;
 	}
-	
+	//如果上传到数据库的图片有两张或以上，数据库中显示的是(图片地址,图片地址)，需要分割
+	public String[] getImages(){
+		 if(this.getImage()!=null){
+			 String[] split = this.getImage().split(",");
+			 return split;
+		 }
+		return null;
+	}
 	@Override
 	public String toString() {
 		return "SearchItem [id=" + id + ", title=" + title + ", sell_point=" + sell_point + ", price=" + price

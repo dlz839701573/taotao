@@ -69,12 +69,10 @@ public class SearchDao {
 		//	item.setItem_desc((String) solrDocument.get("_version_"));
 			
 			item.setCategory_name(solrDocument.get("item_category_name").toString());
-	
 			
 			//设置高亮(得到的其实还是title？？？？？？？)
-			List<String> list2 = highlighting.get(solrDocument.get("id")).get(solrDocument.get("item_title"));
-			
-			
+			List<String> list2 = highlighting.get(solrDocument.get("id")).get("item_title");
+					
 			//高亮显示非常的迷
 			String gaoliang="";
 			if(list2!=null&& list2.size()>0){
@@ -88,12 +86,8 @@ public class SearchDao {
 			list.add(item);
 		}
 		searchResult.setItemList(list);
-		//因为这里得到的searchResult对象的pageCount所以需要在service层完善
-	
+		//因为这里得到的searchResult对象的pageCount所以需要在service层完善	
 		return searchResult;
 		//创建一个query对象
-	}
-	
-	
-	
+	}	
 }

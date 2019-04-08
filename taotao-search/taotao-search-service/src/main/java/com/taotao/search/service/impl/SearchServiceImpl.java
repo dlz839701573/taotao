@@ -147,14 +147,23 @@ public class SearchServiceImpl implements SearchService {
 		query.setRows(rows);
 		//数据开始位置
 		query.setStart((page-1)*rows);   
-		//4.设置高亮
+		/*//4.设置高亮
 				//开启高亮
 		query.setHighlight(true);
 				//设置高亮域
 		query.addHighlightField("item_title");
 				//设置前后缀
-		query.setHighlightSimplePre("<em style=\"color:red\">");
-		query.setHighlightSimplePost("</em>");
+		query.setHighlightSimplePre("<span style='color:red'>");
+		query.setHighlightSimplePost("</span>");*/
+		
+		//2.2.设置默认的搜索域
+				//2.3设置高亮
+				query.setHighlight(true);
+				query.setHighlightSimplePre("<em style=\"color:red\">");
+				query.setHighlightSimplePost("</em>");
+				query.addHighlightField("item_title");//设置高亮显示的域
+		
+		
 		
 		//执行查询
 		SearchResult result = searchDao.QueryAll(query);
