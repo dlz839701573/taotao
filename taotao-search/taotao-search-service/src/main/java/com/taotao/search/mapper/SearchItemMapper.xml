@@ -18,4 +18,23 @@
 			a.cid = b.id
 		AND a.id = c.item_id
  	</select>
+ 	
+ 	<select id="getSearchItemId" parameterType="long" resultType="com.taotao.common.pojo.SearchItem">
+ 		SELECT
+			a.id,
+		  a.title,
+			a.image,
+			a.price,
+			a.sell_point,
+			b.`name` as category_name,
+			c.item_desc
+		FROM
+			tb_item a,
+			tb_item_cat b,
+			tb_item_desc c
+		WHERE
+			a.cid = b.id
+		AND a.id = c.item_id
+		and a.id=#{itemId}
+ 	</select>
 </mapper>

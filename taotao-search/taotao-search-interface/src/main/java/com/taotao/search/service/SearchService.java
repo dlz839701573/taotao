@@ -13,4 +13,9 @@ public interface SearchService {
 	public TaotaoResult DeImportAllSearchItems()throws Exception;
 	//条件查询索引
 	public SearchResult search(String queryString,Integer page,Integer rows)throws Exception;
+	//添加商品更新索引
+	public TaotaoResult updateSearch(Long itemId);
+			
+			
+			
 }

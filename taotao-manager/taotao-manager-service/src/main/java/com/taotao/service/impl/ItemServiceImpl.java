@@ -3,7 +3,15 @@ package com.taotao.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
@@ -26,11 +34,11 @@ private TbItemMapper itemMapper;
 //mapper属性没有注入在向数据库中插入数据时 回报空指针异常
 @Autowired
 private TbItemDescMapper itemDescMapper;
-	/***
-	 * 
-	 * 
-	 * 
-	 */
+
+@Autowired
+private  JmsTemplate jmsTemplate;
+@Resource
+private Destination destination;
 	
 	@Override
 	public EasyUIDataGridResult getItemList(Integer page, Integer rows) {
@@ -61,7 +69,7 @@ private TbItemDescMapper itemDescMapper;
 	@Override
 	public TaotaoResult saveItem(TbItem item, String desc) {
 		// 1、生成商品id
-		long itemId = IDUtils.genItemId();
+		final long itemId = IDUtils.genItemId();
 		// 2、补全TbItem对象的属性
 		item.setId(itemId);
 		//商品状态，1-正常，2-下架，3-删除
@@ -80,18 +88,21 @@ private TbItemDescMapper itemDescMapper;
 		itemDesc.setUpdated(date);
 		System.out.println(itemDesc);
 		// 6、向商品描述表插入数据
-		try {
-			itemDescMapper.insert(itemDesc);
-		} catch (Exception e) {
-			System.out.println("就是这里出错了");
-		}finally {
-			return TaotaoResult.ok();
-		}	
+		itemDescMapper.insert(itemDesc);
+			//由于下边的是一个多线程，所以（第一次执行）可能上边的还没执行下边的就执行了，这个时候获取的itemId为空就会报空指针异常
+		//以后出现的概率小是因为第一次加载会将数据存入缓存中去
+		//将更改或添加的商品id发送至MQ，由MQ发送给索引逻辑更新索引
+		jmsTemplate.send(destination, new MessageCreator() {
+			
+			@Override
+			public Message createMessage(Session session) throws JMSException {
+				
+				return session.createTextMessage(itemId+"");
+			}
+		});
+		return TaotaoResult.ok();
 	}
 
-	
-
-	
 
 	
 }

@@ -1,5 +1,6 @@
 package com.taotao.search.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -179,6 +180,21 @@ public class SearchServiceImpl implements SearchService {
 		result.setPageCount(pageCount);
 		
 		return result;
+	}
+
+	//添加商品时更新索引库
+	@Override
+	public TaotaoResult updateSearch(Long itemId){
+		 try {
+			searchDao.getSearchItemId(itemId);
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		 return TaotaoResult.ok();
 	}
 	
 	

@@ -1,8 +1,12 @@
 package com.taotao.search.dao;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.jms.Destination;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
@@ -10,18 +14,31 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.taotao.common.pojo.SearchItem;
 import com.taotao.common.pojo.SearchResult;
+import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.search.mapper.SearchItemMapper;
 
 
 @Repository
 public class SearchDao {
+	//更新索引相关
 	@Autowired
 	private  SolrServer solrServer;
 	
+	@Autowired
+	private JmsTemplate jmsTemplate;
+	
+	@Resource
+	private Destination destination; 
+	
+	@Autowired
+	private SearchItemMapper mapper;
 	//根据条件查询数据,返回的数据有总页数，总记录数，商品列表信息，数据回显
 	//是一个List<SearchItem>
 	//传入的数据是分页信息(一页20或者N条记录)
@@ -89,5 +106,36 @@ public class SearchDao {
 		//因为这里得到的searchResult对象的pageCount所以需要在service层完善	
 		return searchResult;
 		//创建一个query对象
-	}	
+	}
+	
+	//根据商品id获取商品数据，将获取到的数据更新到索引库中
+	public TaotaoResult getSearchItemId(long itemId) throws Exception, IOException{
+		//注入mapper
+		SearchItem searchItem = mapper.getSearchItemId(itemId);
+		//获取数据
+
+		//利用solrj 更新索引
+				//创建连接
+		SolrInputDocument document = new SolrInputDocument();
+				//创建一个文档对象
+				//向文档中添加域
+		document.addField("id", searchItem.getId());
+		document.addField("item_title", searchItem.getTitle());
+		document.addField("item_sell_point", searchItem.getSell_point());
+		document.addField("item_price", searchItem.getPrice());
+		document.addField("item_image", searchItem.getImage());
+		document.addField("item_category_name", searchItem.getCategory_name());
+		document.addField("item_desc", searchItem.getItem_desc());
+				//把document对象添加到索引库中
+		solrServer.add(document);
+				//提交修改
+		solrServer.commit();
+		
+		
+		
+		return TaotaoResult.ok();
+		
+	}
+	
+	
 }
