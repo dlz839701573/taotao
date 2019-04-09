@@ -103,6 +103,23 @@ private Destination destination;
 		return TaotaoResult.ok();
 	}
 
+	//根据商品id查询商品
+	@Override
+	public TbItem selectItemById(Long itemId) {
+		//注入mapper
+		//根据主键查询商品详情
+		TbItem item = itemMapper.selectByPrimaryKey(itemId);
+		//返回items
+		return item;
+	}
+	//商品desc
+	@Override
+	public TbItemDesc selectItemDescById(Long itemId) {
+		//注入descmapper
+		TbItemDesc itemDesc = itemDescMapper.selectByPrimaryKey(itemId);
+		return itemDesc;
+	}
+
 
 	
 }

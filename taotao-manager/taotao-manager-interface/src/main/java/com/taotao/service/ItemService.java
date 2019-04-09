@@ -13,4 +13,9 @@ public interface ItemService {
 	
 	//查询商品图片，接受的是商品的id，返回的是图片的链接
 	
+	
+	//根据商品id查询商品（不包括详细信息）
+	public TbItem selectItemById(Long itemId);
+	//根据商品id查询商品详细信息
+	public TbItemDesc selectItemDescById(Long itemId);
 }
