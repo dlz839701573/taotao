@@ -39,6 +39,8 @@ private TbItemDescMapper itemDescMapper;
 private  JmsTemplate jmsTemplate;
 @Resource
 private Destination destination;
+
+
 	
 	@Override
 	public EasyUIDataGridResult getItemList(Integer page, Integer rows) {

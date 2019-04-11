@@ -12,6 +12,14 @@
 	
 	
 	<dependencies>
+	
+	
+		<!-- Redis客户端 -->
+			<dependency>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+			</dependency>
+	
 		<!-- 添加接口的依赖 -->
 		<dependency>
 			<groupId>com.taotao</groupId>
