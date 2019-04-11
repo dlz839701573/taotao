@@ -28,6 +28,7 @@ public class ItemController {
 		TbItemDesc tbItemDesc = itemService.selectItemDescById(itemId);
 		
 		Item item = new Item(tbItem);
+		
 		model.addAttribute("item", item);
 		model.addAttribute("itemDesc", tbItemDesc);
 		

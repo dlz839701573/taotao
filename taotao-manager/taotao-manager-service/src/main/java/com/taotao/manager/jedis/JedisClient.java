@@ -6,7 +6,7 @@ public interface JedisClient {
 	String get(String key);
 	Boolean exists(String key);
 	//过期时间设置
-	Long expire(String key, int seconds);
+	Long expire(String key,int seconds);
 	//查看过期时间还有多少
 	Long ttl(String key);
 	Long incr(String key);

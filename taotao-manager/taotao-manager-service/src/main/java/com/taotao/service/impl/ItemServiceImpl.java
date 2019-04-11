@@ -10,6 +10,7 @@ import javax.jms.Message;
 import javax.jms.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ import com.github.pagehelper.PageInfo;
 import com.taotao.common.pojo.EasyUIDataGridResult;
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.common.util.IDUtils;
+import com.taotao.common.util.JsonUtils;
+import com.taotao.manager.jedis.JedisClient;
 import com.taotao.mapper.TbItemDescMapper;
 import com.taotao.mapper.TbItemMapper;
 import com.taotao.pojo.TbItem;
@@ -34,12 +37,20 @@ private TbItemMapper itemMapper;
 //mapper属性没有注入在向数据库中插入数据时 回报空指针异常
 @Autowired
 private TbItemDescMapper itemDescMapper;
-
+//注入MQ相关
 @Autowired
 private  JmsTemplate jmsTemplate;
 @Resource
 private Destination destination;
-
+//注入缓存相关
+@Autowired
+private JedisClient jedisClient;
+//key前缀(表=名)
+@Value("${item_infi_key}")
+private String item_infi_key;
+//key后缀(字段名)
+@Value("${item_infi_expire}")
+private int item_infi_expire;
 
 	
 	@Override
@@ -106,11 +117,44 @@ private Destination destination;
 	}
 
 	//根据商品id查询商品
+	//查看缓存中是否有数据，没有则从数据库中取出并返回，然后添加缓存
+	//注入
 	@Override
 	public TbItem selectItemById(Long itemId) {
 		//注入mapper
+		
+		//查看缓存中是否有数据
+		//缓存操作需要try catch
+		try {
+			if (itemId != null) {
+				if (jedisClient.get(item_infi_key + ":" + itemId + ":base") != null) {
+					String string = jedisClient.get(item_infi_key + ":" + itemId + ":base");
+					//查询此商品调用次数多说明是热 门商品，需要增加过期时间
+					//后缀不应该写死，这里写死了
+					jedisClient.expire(item_infi_key + ":" + itemId + ":base", item_infi_expire);
+					System.out.println("从缓存中取出TbItem成功");
+					return JsonUtils.jsonToPojo(string, TbItem.class);
+					
+				}
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		//根据主键查询商品详情
 		TbItem item = itemMapper.selectByPrimaryKey(itemId);
+		try {
+			if (item != null){
+			//添加缓存
+			jedisClient.set(item_infi_key + ":" + itemId + ":base", JsonUtils.objectToJson(item));
+			//添加过期时间
+			jedisClient.expire(item_infi_key + ":" + itemId + ":base", item_infi_expire);
+			System.out.println("TbItem添加缓存成功");
+			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		//返回items
 		return item;
 	}
@@ -118,7 +162,41 @@ private Destination destination;
 	@Override
 	public TbItemDesc selectItemDescById(Long itemId) {
 		//注入descmapper
+		
+		//查看缓存中是否有数据
+		try {
+			if(itemId!=null){
+				if(jedisClient.get(item_infi_key+":"+itemId+":desc")!=null){
+					//后缀不应该写死，这里写死了
+					String desc = jedisClient.get(item_infi_key+":"+itemId+":desc");
+					//查询此商品调用次数多说明是热门商品，需要增加过期时间
+					jedisClient.expire(item_infi_key + ":" + itemId + ":base", item_infi_expire);
+					
+					System.out.println("从缓存中取出TbItemDesc成功");
+					return JsonUtils.jsonToPojo(desc, TbItemDesc.class);
+				}
+			}
+		} catch (Exception e1) {
+			
+			e1.printStackTrace();
+		}
+		
+		
+		//从数据库中查询数据
 		TbItemDesc itemDesc = itemDescMapper.selectByPrimaryKey(itemId);
+		//将数据添加到缓存
+		try {
+			if(itemDesc!=null){
+				//添加缓存
+				jedisClient.set(item_infi_key+":"+itemId+":desc", JsonUtils.objectToJson(itemDesc));
+				//设置过期时间
+				jedisClient.expire(item_infi_key+":"+itemId+":desc",item_infi_expire);
+				System.out.println("TbItemDesc添加缓存成功");
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
 		return itemDesc;
 	}
 
