@@ -132,7 +132,7 @@ private int item_infi_expire;
 	//查看缓存中是否有数据，没有则从数据库中取出并返回，然后添加缓存
 	//注入
 	@Override
-	public TbItem selectItemById(Long itemId) {
+	public TbItem selectItemById(final Long itemId) {
 		//注入mapper
 		
 		//查看缓存中是否有数据
@@ -166,7 +166,15 @@ private int item_infi_expire;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		//MQ发送消息生成静态页面
+		jmsTemplate.send(destination, new MessageCreator() {
+			
+			@Override
+			public Message createMessage(Session session) throws JMSException {
+				
+				return session.createTextMessage(itemId+"");
+			}
+		});
 		//返回items
 		return item;
 	}
@@ -211,7 +219,7 @@ private int item_infi_expire;
 		}
 		return itemDesc;
 	}
-
+	
 
 	
 }
