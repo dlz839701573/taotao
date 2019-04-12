@@ -25,7 +25,7 @@
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>	
-	<!-- 页面静态化 -->
+	<!-- 页面静态化。。。。。template路径在这里配置;-->
 	<bean id="freemarkerConfig"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />

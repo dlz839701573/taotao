@@ -24,7 +24,7 @@
 	
 	<!-- 使用Session对象创建一个Destination对象（Queue和Topic的接口）,两端保持一致queue -->
 	<bean id="topicDestination" class="org.apache.activemq.command.ActiveMQTopic">
-		<constructor-arg name="name" value="taotao-manager"></constructor-arg>
+		<constructor-arg name="name" value="item-change-topic"></constructor-arg>
 	</bean>
 	
 	

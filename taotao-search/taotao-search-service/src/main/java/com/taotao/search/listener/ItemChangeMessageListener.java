@@ -24,6 +24,7 @@ public class ItemChangeMessageListener implements MessageListener {
 	@Override
 	public void onMessage(Message message) {
 		if(message instanceof TextMessage){
+			System.out.println("taotao-seach接收到MQ的更新索引");
 			TextMessage textMessage = (TextMessage)message;
 			try {
 				Long itemId = Long.parseLong(textMessage.getText());

@@ -11,6 +11,7 @@
   <packaging>war</packaging>
   
   <dependencies>
+ 
   
   	<!-- 展示商品信息，需要商品服务，引入taotao-manager-interface接口 -->
 		<dependency>
@@ -96,7 +97,18 @@
 		<dependency>
 			<groupId>com.github.sgroschupf</groupId>
 			<artifactId>zkclient</artifactId>
-		</dependency>		
+		</dependency>	
+		
+		
+			<!--MQ依赖一定要放在Spring的后边才可以，不然报错 -->
+			<dependency>
+				<groupId>org.apache.activemq</groupId>
+				<artifactId>activemq-all</artifactId>
+			</dependency> 
+			
+			
+
+			
 	</dependencies>
 	<!-- 配置tomcat插件 -->
 	<build>

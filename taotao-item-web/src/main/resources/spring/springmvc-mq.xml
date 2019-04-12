@@ -28,16 +28,11 @@
 	</bean>
 	<!-- 配置MQ监听器 -->
 	
-	<bean id="itemChangeMessageListener" class="com.taotao.search.listener.ItemChangeMessageListener"></bean>
+	<bean id="itemChangeGenHTMLMessageListener" class="com.taotao.item.listener.ItemChangeGenHTMLMessageListener"></bean>
 	
  <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
 		<property name="connectionFactory" ref="connectionFactory"></property>
 		<property name="destination" ref="topicDestination"></property>
-		<property name="messageListener" ref="itemChangeMessageListener"></property>
-	</bean>   
-	
- 
-
-	
-
+		<property name="messageListener" ref="itemChangeGenHTMLMessageListener"></property>
+	</bean>  
 </beans>
