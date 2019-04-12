@@ -18,6 +18,11 @@
 			<artifactId>taotao-manager-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+ 		<!-- Freemarker -->
+		  <dependency>
+		    <groupId>org.freemarker</groupId>
+		    <artifactId>freemarker</artifactId>
+		    </dependency>
   
 		<dependency>
 			<groupId>com.taotao</groupId>
