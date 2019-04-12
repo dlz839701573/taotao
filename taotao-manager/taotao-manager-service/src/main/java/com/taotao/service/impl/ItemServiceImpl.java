@@ -30,6 +30,16 @@ import com.taotao.pojo.TbItemDescExample;
 import com.taotao.pojo.TbItemExample;
 import com.taotao.pojo.TbItemExample.Criteria;
 import com.taotao.service.ItemService;
+
+/**
+ * 查询所有商品
+ * 商品的增加以及查询单个商品的操作
+ * 查询单个商品时，将数据添加至redis中,并设置过期时间,每访问一次，重新设置过期时间，保证频繁访问的商品在啊redis中，增速
+ * 增加商品的同时利用消息队列MQ广播(更新索引库,生成商品详情的静态页面)
+ * @author 陈宁
+ *
+ */
+
 @Service
 public class ItemServiceImpl implements ItemService  {
 @Autowired
@@ -52,7 +62,9 @@ private String item_infi_key;
 @Value("${item_infi_expire}")
 private int item_infi_expire;
 
-	
+	/**
+	 * 查询所有商品
+	 */
 	@Override
 	public EasyUIDataGridResult getItemList(Integer page, Integer rows) {
 		if(page==null)page=1;

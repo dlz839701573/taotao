@@ -18,9 +18,6 @@
   <!--   <dubbo:reference interface="com.taotao.content.service.ContentService" id="contentService" /> -->
 	<dubbo:reference interface="com.taotao.service.ItemService" id="itemService" />
 	
-	
-	
-	
 	<!-- 视图解析器 -->
 	
 	<bean
