@@ -10,6 +10,11 @@
 	<artifactId>taotao-common</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<dependencies>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+			</dependency>
+	
 		<!-- 时间操作组件 -->
 		<dependency>
 			<groupId>joda-time</groupId>

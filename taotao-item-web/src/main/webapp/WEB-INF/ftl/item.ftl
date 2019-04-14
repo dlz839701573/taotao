@@ -142,7 +142,7 @@
 		
 		<div id="preview">
 			<div id="spec-n1" class="jqzoom" clstag="shangpin|keycount|product|spec-n1">
-				<img data-img="1" width="350" height="350" src="${item.images[0]} !" alt="${item.title}!"  jqimg="${item.images[0]}!"/>
+				<img data-img="1" width="350" height="350" src="${item.images[0]}" alt="${item.title}"  jqimg="${item.images[0]}"/>
 			</div>
 					
 			<div id="spec-list" clstag="shangpin|keycount|product|spec-n5">
