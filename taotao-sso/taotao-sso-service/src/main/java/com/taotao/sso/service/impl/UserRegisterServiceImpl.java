@@ -84,7 +84,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 		//验证email可以为空，（有数值）不可重复
 		if(StringUtils.isNotBlank(user.getEmail())){
 			if((boolean)ChackData(user.getEmail(), 2).getData()){
-				return TaotaoResult.build(400, "注册失败.邮箱已经存在");
+			 return TaotaoResult.build(400, "注册失败.邮箱已经存在");
 			}
 		}
 		//3.密码MD5加密
