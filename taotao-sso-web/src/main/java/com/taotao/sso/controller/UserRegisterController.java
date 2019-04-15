@@ -40,6 +40,8 @@ public class UserRegisterController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 		return userRegister.ChackData(param1, type);
 		
 	}

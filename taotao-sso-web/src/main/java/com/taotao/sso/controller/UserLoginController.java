@@ -3,19 +3,20 @@ package com.taotao.sso.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.dubbo.remoting.http.HttpServer;
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.common.util.CookieUtils;
+import com.taotao.common.util.JsonUtils;
 import com.taotao.sso.service.UserLoginService;
 
 @Controller
@@ -54,13 +55,38 @@ public class UserLoginController {
 	 * @param token 用户登录凭证
 	 * @return
 	 */
-	@RequestMapping(value="/user/token/{token}",method=RequestMethod.GET)
+	@RequestMapping(value="/user/token/{token}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
-	public  TaotaoResult selectByToken(@PathVariable String token){
+	public  Object selectByToken(@PathVariable String token,String callback){
 		//注入service
+		//判断是否有回调请求(处理跨域)
+		if(StringUtils.isNotBlank(callback)){
+			MappingJacksonValue value = new MappingJacksonValue(userLoginService.selectByToken(token));
+			value.setJsonpFunction(callback);
+			return value;
+		}
+			
 		return userLoginService.selectByToken(token);
 		
 	}
+	/*@RequestMapping(value="/user/token/{token}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public String getUserByToken(@PathVariable String token,String callback){
+		
+		//判断是否是Jsonp请求
+		if(StringUtils.isNotBlank(callback)){
+			//如果是jsonp 需要拼接 类似于fun({id:1});
+			TaotaoResult result = userLoginService.selectByToken(token);
+			String jsonpstr = callback+"("+JsonUtils.objectToJson(result)+")";
+			return jsonpstr;
+		}
+		//如果不是jsonp
+		//1.调用服务
+		TaotaoResult result = userLoginService.selectByToken(token);
+		return JsonUtils.objectToJson(result);
+	}*/
+
+	
 	/**GET
 	 * /user/logout/{token}
 	 * @param token 安全退出凭证

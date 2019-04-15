@@ -75,6 +75,7 @@ public class UserLoginServiceImpl implements UserLoginService {
 			
 		//1.注入jedisClient
 		String userJson = jedisClient.get(USER_INFO+":"+token);
+		System.out.println(userJson);
 		//通过键查询有值，//如果查询到的有值则增加过期时间,返回200和用户信息
 		if(StringUtils.isNotBlank(userJson)){
 			jedisClient.expire(USER_INFO+":"+token, EXPIRE);
