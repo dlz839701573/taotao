@@ -1,0 +1,4 @@
+com\taotao\cart\jedis\JedisClientCluster.class
+com\taotao\cart\service\impl\CartServiceImpl.class
+com\taotao\cart\jedis\JedisClientPool.class
+com\taotao\cart\jedis\JedisClient.class
